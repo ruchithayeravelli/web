@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e5e5e5;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111111;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #888888;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #444444;
+      margin-bottom: 5px;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid #dddddd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #111111;
+      background: #fafafa;
+      font-family: Arial, sans-serif;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #4f46e5;
+      background: #ffffff;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 11px;
+      background: #4f46e5;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.15s;
+    }
+
+    button[type="submit"]:hover {
+      background: #4338ca;
+    }
+
+    button[type="submit"]:active {
+      background: #3730a3;
+    }
+
+    #status {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 14px;
+      min-height: 18px;
+      color: #16a34a;
+    }
+
+    #status.error {
+      color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-card">
+    <h2>Contact Us</h2>
+    <p class="subtitle">We'll get back to you within 24 hours.</p>
+
+    <form id="myForm">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Ravi Kumar" required>
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+      </div>
+      <button type="submit">Send message</button>
+    </form>
+
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+    document.getElementById("myForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const btn = this.querySelector("button");
+      btn.textContent = "Sending...";
+      btn.disabled = true;
+
+      const formData = {
+        name:    this.name.value,
+        email:   this.email.value,
+        message: this.message.value
+      };
+
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(formData) })
+        .then(res => res.json())
+        .then(() => {
+          document.getElementById("status").textContent = "Submitted! Thank you.";
+          document.getElementById("status").className = "";
+          this.reset();
+          btn.textContent = "Send message";
+          btn.disabled = false;
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "Error. Please try again.";
+          document.getElementById("status").className = "error";
+          btn.textContent = "Send message";
+          btn.disabled = false;
+        });
+    });
+  </script>
+
+</body>
+</html>
